@@ -6,6 +6,8 @@
   "scripts": {
     "start": "nodemon ./main.ts",
     "test": "jest",
+    "build": "tsc",
+    "vercel-build": "tsc",
     "autocannon": "autocannon -c 110 -d 10 -p 1 http://localhost:3000/login"
   },
   "author": "",
@@ -20,7 +22,8 @@
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.3",
+    "vercel": "^34.2.4"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

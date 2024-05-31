@@ -1,13 +1,15 @@
-import app from './app'
+import app from "./app";
 
 function main() {
-    try {
-        app.listen(3000, 'localhost', () => {
-            console.log("Server running at port 3000")
-        })
-    } catch (error) { 
-        
-    }
+  try {
+    app.listen(3000, "localhost", () => {
+      console.log("Server running at port 3000");
+    });
+  } catch (error) {
+    console.log("Error: ", error);
+  }
 }
 
-main()
+main();
+
+export default main;
