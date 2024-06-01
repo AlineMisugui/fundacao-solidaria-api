@@ -1,10 +1,25 @@
-FROM node:20
+#Build stage
+FROM node:20-alpine AS build
 
-COPY . .
 WORKDIR /app
 
-RUN ["npm", "install"]
+COPY package*.json .
 
-EXPOSE 8080
+RUN npm install
 
-CMD ["npm", "run", "start"]
+COPY . .
+
+RUN npm run build
+
+#Production stage
+FROM node:20-alpine AS production
+
+WORKDIR /app
+
+COPY package*.json .
+
+RUN npm ci --only=production
+
+COPY --from=build /app/dist ./dist
+
+CMD ["node", "dist/main.js"]
