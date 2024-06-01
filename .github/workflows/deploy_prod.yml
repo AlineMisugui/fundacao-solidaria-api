@@ -62,7 +62,7 @@ jobs:
           aws_access_key: ${{secrets.ACCESS_KEY_ID}}
           aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
           application_name: fundacao-solidaria-api
-          environment_name: fundacao-solidaria-api-env
+          environment_name: fundacao-solidaria-api
           region: us-west-2
           version_label: "e-learn-${{ steps.format-time.outputs.replaced }}"
           deployment_package: deploy.zip

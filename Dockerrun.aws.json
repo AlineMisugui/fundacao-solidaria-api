@@ -2,7 +2,6 @@
     "AWSEBDockerrunVersion": "1",
     "Logging": "/tmp/sample-app",
     "Image": {
-        "Name": "janedoe/image",
-        "Update": "true"
+        "Update": "false"
     }
 }
