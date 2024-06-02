@@ -37,6 +37,9 @@ export class Ong extends BaseEntity {
   @Column({ nullable: true })
   aditional_information: string;
 
+  @Column()
+  pix_key: string;
+
   @CreateDateColumn()
   created_at: Date;
 

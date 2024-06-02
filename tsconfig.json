@@ -17,5 +17,6 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "strictPropertyInitialization": false
-  }
+  },
+  "exclude": ["./node_modules", "./dist"]
 }
