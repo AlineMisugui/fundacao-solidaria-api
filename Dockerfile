@@ -1,7 +1,5 @@
 FROM node:20-alpine
 
-RUN npm install -g typescript
-
 WORKDIR /app
 
 COPY package*.json .
