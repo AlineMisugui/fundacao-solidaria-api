@@ -7,10 +7,11 @@ on:
   pull_request:
     branches:
       - docker-test
-
+    
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@master
