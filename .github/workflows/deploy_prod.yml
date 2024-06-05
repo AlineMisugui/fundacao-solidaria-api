@@ -27,15 +27,6 @@ jobs:
       - name: Generate deployment package
         run: zip -r deploy.zip .elasticbeanstalk Dockerrun.aws.json
 
-      - name: Run string replace
-        uses: frabert/replace-string-action@master
-        id: format-time
-        with:
-          pattern: '[:\.]+'
-          string: "${{ steps.current-time.outputs.time }}"
-          replace-with: '-'
-          flags: 'g'
-
       - name: Setup AWS ECR Details
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -51,25 +42,31 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
           ECR_REPOSITORY: fundacao-solidaria-api
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ github.sha }};latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Get timestamp
-        uses: gerred/actions/current-time@master
-        id: current-time
+      - name: Updates Dockerrun.aws.json
+        env:
+          ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
+          ECR_REPOSITORY: fundacao-solidaria-api
+          IMAGE_TAG: ${{ github.sha }};latest
+        run: |
+          sed -i "s/ECR_REGISTRY/$ECR_REGISTRY/g" Dockerrun.aws.json
+          sed -i "s/ECR_REPOSITORY/$ECR_REPOSITORY/g" Dockerrun.aws.json
+          sed -i "s/IMAGE_TAG/$IMAGE_TAG/g" Dockerrun.aws.json
 
-      # - name: Beanstalk Deploy for app
-      #   uses: einaregilsson/beanstalk-deploy@v16
-      #   with:
-      #     aws_access_key: ${{secrets.ACCESS_KEY_ID}}
-      #     aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
-      #     application_name: fundacao-solidaria-api
-      #     environment_name: fundacao-solidaria-api
-      #     region: us-west-2
-      #     version_label: "e-learn-${{ steps.format-time.outputs.replaced }}"
-      #     deployment_package: deploy.zip
+      - name: Beanstalk Deploy for app
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: ${{secrets.ACCESS_KEY_ID}}
+          aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
+          application_name: fundacao-solidaria-api
+          environment_name: fundacao-solidaria-api
+          region: us-west-2
+          version_label: "${{ steps.format-time.outputs.replaced }}"
+          deployment_package: deploy.zip
 
-      # - name: Deployed!
-        # run: echo App deployed to ELB
+      - name: Deployed!
+        run: echo App deployed to ELB
