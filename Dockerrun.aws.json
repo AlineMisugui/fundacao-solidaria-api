@@ -2,7 +2,7 @@
     "AWSEBDockerrunVersion": "1",
     "Logging": "/tmp/sample-app",
     "Image": {
-        "Name": "ECR_REGISTRY/ECR_REPOSITORY/IMAGE_TAG",
+        "Name": "ECR_REGISTRY/ECR_REPOSITORY:IMAGE_TAG",
         "Update": "true"
     },
     "Ports": [{
