@@ -42,16 +42,16 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
           ECR_REPOSITORY: fundacao-solidaria-api
-          IMAGE_TAG: ${{ github.sha }};latest
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Updates Dockerrun.aws.json
         env:
           ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
           ECR_REPOSITORY: fundacao-solidaria-api
-          IMAGE_TAG: ${{ github.sha }};latest
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           sed -i "s/ECR_REGISTRY/$ECR_REGISTRY/g" Dockerrun.aws.json
           sed -i "s/ECR_REPOSITORY/$ECR_REPOSITORY/g" Dockerrun.aws.json
