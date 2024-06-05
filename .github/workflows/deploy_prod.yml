@@ -1,12 +1,9 @@
-name: production
+name: Build Docker Image and Deploy to EBS
 
 on:
   push:
     branches:
-      - docker-test
-  pull_request:
-    branches:
-      - docker-test
+      - main
     
 jobs:
   ci:
@@ -59,6 +56,3 @@ jobs:
           region: us-west-2
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
-
-      - name: Deployed!
-        run: echo App deployed to ELB
