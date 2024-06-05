@@ -16,9 +16,6 @@ jobs:
       - name: Checkout 🛎
         uses: actions/checkout@master
 
-      - name: Generate deployment package
-        run: zip -r deploy.zip .elasticbeanstalk Dockerrun.aws.json
-
       - name: Setup AWS ECR Details
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -49,6 +46,9 @@ jobs:
           sed -i "s/ECR_REPOSITORY/${ECR_REPOSITORY}/g" Dockerrun.aws.json
           sed -i "s/IMAGE_TAG/${IMAGE_TAG}/g" Dockerrun.aws.json
 
+      - name: Generate deployment package
+        run: zip -r deploy.zip .elasticbeanstalk Dockerrun.aws.json
+        
       - name: Beanstalk Deploy for app
         uses: einaregilsson/beanstalk-deploy@v16
         with:
