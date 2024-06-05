@@ -11,15 +11,6 @@ on:
 jobs:
   ci:
     runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [20]
-    env:
-      NODE_ENV: "development"
-
-
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@master
@@ -53,9 +44,9 @@ jobs:
           ECR_REPOSITORY: fundacao-solidaria-api
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          sed -i "s/ECR_REGISTRY/$ECR_REGISTRY/g" Dockerrun.aws.json
-          sed -i "s/ECR_REPOSITORY/$ECR_REPOSITORY/g" Dockerrun.aws.json
-          sed -i "s/IMAGE_TAG/$IMAGE_TAG/g" Dockerrun.aws.json
+          sed -i "s/ECR_REGISTRY/${ECR_REGISTRY}/g" Dockerrun.aws.json
+          sed -i "s/ECR_REPOSITORY/${ECR_REPOSITORY}/g" Dockerrun.aws.json
+          sed -i "s/IMAGE_TAG/${IMAGE_TAG}/g" Dockerrun.aws.json
 
       - name: Beanstalk Deploy for app
         uses: einaregilsson/beanstalk-deploy@v16
