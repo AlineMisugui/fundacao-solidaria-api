@@ -1,8 +1,8 @@
+import { PaymentRequestDTO, PaymentsByUserDTO } from "./payment.dto";
+import Payment from "./payment.model";
+
 export interface PaymentService {
-  generatePixQrCode(pixKey: string): Promise<string>;
-  createPayment(): void;
-  getPayment(): void;
-  updatePayment(): void;
-  deletePayment(): void;
-  listPaymentsByUser(): void;
+  createPayment(newPayment: PaymentRequestDTO): Promise<Payment>;
+  getPayment(id: number): Promise<Payment | null>;
+  getPaymentsByDonor(user_id: number): Promise<PaymentsByUserDTO>;
 }

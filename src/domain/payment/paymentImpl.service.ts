@@ -1,41 +1,46 @@
+import { NotFoundException } from "src/exceptions/notFoundException";
 import dataSource from "../../../dataSource";
+import Donor from "../donor/donor.model";
+import { PaymentRequestDTO, PaymentsByUserDTO } from "./payment.dto";
+import PaymentMapper from "./payment.mapper";
+import Payment from "./payment.model";
 import { PaymentService } from "./payment.service";
-import Ong from "../ong/ong.model";
 
 class PaymentServiceImpl implements PaymentService {
-  async generatePixQrCode(pixKey: string): Promise<string> {
-    let qrCodeBase64: string = await new Promise((resolve, reject) => {
-      QRCode.toDataURL(pixKey, (err: any, code: any) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(code);
-      });
-    });
-    return qrCodeBase64;
+  async createPayment(newPayment: PaymentRequestDTO): Promise<Payment> {
+    const payment = PaymentMapper.toEntity(newPayment);
+    const paymentCreated = await paymentRepository.save(payment);
+    return paymentCreated;
   }
 
-  createPayment(): void {
-    console.log("Creating payment...");
+  async getPayment(id: number): Promise<Payment | null> {
+    const payment = await paymentRepository.findOneBy({ id });
+    if (payment == null) {
+      throw new NotFoundException("Payment not found");
+    }
+    return payment;
   }
 
-  getPayment(): void {
-    console.log("Getting payment...");
-  }
+  async getPaymentsByDonor(user_id: number): Promise<PaymentsByUserDTO> {
+    const donor = await donorRepository.findOneBy({ user_id });
+    if (donor == null) {
+      throw new NotFoundException("Donor not found");
+    }
 
-  updatePayment(): void {
-    console.log("Updating payment...");
-  }
-
-  deletePayment(): void {
-    console.log("Deleting payment...");
-  }
-
-  listPaymentsByUser(): void {
-    console.log("Listing payments by user...");
+    const payments = await paymentRepository.findBy({ id_donor: donor.id });
+    const total = payments.length;
+    const totalValue = payments.reduce(
+      (acc, payment) => acc + payment.value,
+      0
+    );
+    return {
+      payments,
+      total,
+      totalValue,
+    };
   }
 }
 
-const QRCode = require("qrcode");
-const ongRepository = dataSource.getRepository(Ong);
+const donorRepository = dataSource.getRepository(Donor);
+const paymentRepository = dataSource.getRepository(Payment);
 export default new PaymentServiceImpl();
