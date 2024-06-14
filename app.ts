@@ -2,12 +2,14 @@ import express from "express";
 import "reflect-metadata";
 import { routes } from "./routes";
 import dataSource from "./dataSource";
+import cors from "cors";
 
 class App {
   express: express.Application;
 
   constructor() {
     this.express = express();
+    this.express.use(cors());
     this.middleware();
     this.database();
     this.routes();
