@@ -23,7 +23,7 @@ routes.put(
 );
 routes.delete("/donor", authenticate, donorController.deleteDonor);
 
-routes.get("/ong/all", authenticate, ongController.getOngs);
-routes.get("/ong/:id", authenticate, ongController.getOngById);
+routes.get("/ong/all", ongController.getOngs);
+routes.get("/ong/:id", ongController.getOngById);
 
 export { routes };
